@@ -1,0 +1,37 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { entreprise } from "../data/entreprise";
+---
+
+<Layout
+  title="Demande envoyée | SARL Ouerghi"
+  description="Votre demande de devis a bien été envoyée à SARL Ouerghi, plombier chauffagiste à Cannes. Nous vous recontactons rapidement."
+  noindex
+>
+  <section class="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6">
+    <p class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+      Demande envoyée
+    </p>
+    <h1 class="mt-2 font-heading text-4xl font-semibold text-petrol sm:text-5xl">
+      Merci pour votre message
+    </h1>
+    <p class="mt-4 text-slate-soft">
+      Votre demande de devis a bien été transmise. On vous rappelle en général sous 24 à 48h. En cas d'urgence, appelez directement.
+    </p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <a
+        href={entreprise.telephoneHref}
+        class="shadow-soft-hover rounded-full bg-copper px-7 py-3 font-heading text-base font-semibold text-white transition-colors hover:bg-copper-hover"
+      >
+        {entreprise.telephone}
+      </a>
+      <a
+        href="/"
+        class="rounded-full border border-border px-7 py-3 font-heading text-base font-semibold text-petrol transition-colors hover:border-copper hover:text-copper"
+      >
+        Retour à l'accueil
+      </a>
+    </div>
+  </section>
+</Layout>

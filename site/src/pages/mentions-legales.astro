@@ -1,0 +1,73 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import { entreprise } from "../data/entreprise";
+---
+
+<Layout
+  title="Mentions légales | SARL Ouerghi"
+  description="Mentions légales du site de SARL Ouerghi, plombier chauffagiste à Cannes : éditeur, hébergeur, propriété intellectuelle."
+  noindex
+>
+  <section class="hero-band text-white">
+    <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+      <h1 class="font-heading text-4xl font-semibold sm:text-5xl">Mentions légales</h1>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
+    <div class="space-y-10">
+      <div>
+        <SectionTitle as="h2">Éditeur du site</SectionTitle>
+        <dl class="mt-4 space-y-1 text-slate">
+          <p>
+            Le présent site est édité par <strong>{entreprise.legal.denominationSociale}</strong>,
+            exploitée sous le nom commercial « {entreprise.nom} », {entreprise.legal.formeJuridique}
+            au capital social de {entreprise.legal.capitalSocial}.
+          </p>
+          <p>Siège social : {entreprise.adresse.rue}, {entreprise.adresse.codePostal} {entreprise.adresse.ville}</p>
+          <p>SIRET : {entreprise.legal.siret}</p>
+          <p>RCS {entreprise.legal.rcsVille}</p>
+          <p>N° TVA intracommunautaire : {entreprise.legal.tva}</p>
+          <p>Gérant : {entreprise.legal.gerant}</p>
+          <p>
+            Téléphone : <a href={entreprise.telephoneHref} class="text-work hover:text-copper">{entreprise.telephone}</a>
+          </p>
+          <p>
+            Email : <a href={`mailto:${entreprise.email}`} class="text-work hover:text-copper">{entreprise.email}</a>
+          </p>
+        </dl>
+      </div>
+
+      <div>
+        <SectionTitle as="h2">Directeur de la publication</SectionTitle>
+        <p class="mt-4 text-slate">{entreprise.legal.gerant}, en qualité de gérant.</p>
+      </div>
+
+      <div>
+        <SectionTitle as="h2">Hébergement</SectionTitle>
+        <p class="mt-4 text-slate">
+          Le site est hébergé par Netlify, Inc., 44 Montgomery Street, Suite 300, San Francisco,
+          California 94104, États-Unis.
+        </p>
+      </div>
+
+      <div>
+        <SectionTitle as="h2">Propriété intellectuelle</SectionTitle>
+        <p class="mt-4 text-slate">
+          L'ensemble des contenus présents sur ce site (textes, photographies, logo) est la
+          propriété de {entreprise.nom}, sauf mention contraire. Toute reproduction, même
+          partielle, est interdite sans autorisation préalable.
+        </p>
+      </div>
+
+      <div>
+        <SectionTitle as="h2">Données personnelles</SectionTitle>
+        <p class="mt-4 text-slate">
+          Le traitement des données transmises via le formulaire de contact est détaillé dans
+          notre <a href="/politique-de-confidentialite/" class="text-work underline hover:text-copper">politique de confidentialité</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

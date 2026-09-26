@@ -1,0 +1,24 @@
+---
+import { entreprise } from "../data/entreprise";
+
+const data = {
+  "@context": "https://schema.org",
+  "@type": "Plumber",
+  name: entreprise.nom,
+  image: `${entreprise.urlSite}/images/logo.png`,
+  telephone: entreprise.telephone,
+  email: entreprise.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: entreprise.adresse.rue,
+    postalCode: entreprise.adresse.codePostal,
+    addressLocality: entreprise.adresse.ville,
+    addressCountry: entreprise.adresse.pays,
+  },
+  areaServed: entreprise.zoneIntervention,
+  url: entreprise.urlSite,
+  priceRange: "€€",
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />

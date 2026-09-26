@@ -1,0 +1,84 @@
+---
+import { entreprise } from "../data/entreprise";
+
+const liens = [
+  { href: "/", label: "Accueil" },
+  { href: "/services/", label: "Services" },
+  { href: "/realisations/", label: "Réalisations" },
+  { href: "/contact/", label: "Contact" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="header-band text-white">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+    <a href="/" class="font-heading text-xl font-semibold tracking-wide sm:text-2xl">
+      {entreprise.nom}
+      <span class="block text-xs font-body font-normal text-white/70 sm:text-sm">
+        {entreprise.slogan}
+      </span>
+    </a>
+
+    <nav aria-label="Navigation principale" class="hidden md:block">
+      <ul class="flex items-center gap-6 font-heading text-base tracking-wide">
+        {
+          liens.map((lien) => (
+            <li>
+              <a
+                href={lien.href}
+                aria-current={currentPath === lien.href ? "page" : undefined}
+                class="border-b-2 border-transparent pb-1 transition-colors hover:border-copper aria-[current=page]:border-copper"
+              >
+                {lien.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a
+      href={entreprise.telephoneHref}
+      class="hidden rounded-full bg-copper px-5 py-2 font-heading text-sm font-semibold tracking-wide transition-colors hover:bg-copper-hover sm:inline-block"
+    >
+      {entreprise.telephone}
+    </a>
+
+    <details class="relative md:hidden">
+      <summary
+        class="cursor-pointer list-none rounded-full border border-white/30 px-4 py-2 font-heading text-sm"
+        aria-label="Ouvrir le menu"
+      >
+        Menu
+      </summary>
+      <nav aria-label="Navigation principale (mobile)">
+        <ul
+          class="shadow-soft-lg absolute right-0 top-full z-20 mt-2 w-56 space-y-1 rounded-2xl border border-white/10 bg-petrol p-3 font-heading text-base"
+        >
+          {
+            liens.map((lien) => (
+              <li>
+                <a
+                  href={lien.href}
+                  aria-current={currentPath === lien.href ? "page" : undefined}
+                  class="block rounded-lg px-2 py-2 hover:bg-white/10 aria-[current=page]:text-copper"
+                >
+                  {lien.label}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a
+              href={entreprise.telephoneHref}
+              class="block rounded-lg bg-copper px-2 py-2 font-semibold hover:bg-copper-hover"
+            >
+              {entreprise.telephone}
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>

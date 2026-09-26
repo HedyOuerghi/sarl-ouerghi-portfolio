@@ -1,0 +1,98 @@
+---
+import AdminNav from "../../components/AdminNav.astro";
+import { isAdminAuthenticated } from "../../lib/adminAuth";
+import { NETLIFY_API_TOKEN, NETLIFY_SITE_ID } from "astro:env/server";
+import "../../styles/global.css";
+
+export const prerender = false;
+
+if (!(await isAdminAuthenticated(Astro.session))) {
+  return Astro.redirect(`/oauth?next=${encodeURIComponent(Astro.url.pathname)}`);
+}
+
+let submissions: any[] = [];
+let errorMessage = "";
+
+if (!NETLIFY_API_TOKEN || !NETLIFY_SITE_ID) {
+  errorMessage = "NETLIFY_API_TOKEN / NETLIFY_SITE_ID ne sont pas encore configurés sur Netlify.";
+} else {
+  try {
+    const formsResponse = await fetch(`https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/forms`, {
+      headers: { Authorization: `Bearer ${NETLIFY_API_TOKEN}` },
+    });
+    const forms = await formsResponse.json();
+    const devisForm = Array.isArray(forms) ? forms.find((f: any) => f.name === "devis") : null;
+
+    if (devisForm) {
+      const submissionsResponse = await fetch(
+        `https://api.netlify.com/api/v1/forms/${devisForm.id}/submissions`,
+        { headers: { Authorization: `Bearer ${NETLIFY_API_TOKEN}` } }
+      );
+      submissions = await submissionsResponse.json();
+      submissions.sort((a: any, b: any) => (a.created_at < b.created_at ? 1 : -1));
+    } else {
+      errorMessage = "Formulaire 'devis' introuvable sur Netlify (peut-être aucune soumission reçue pour l'instant).";
+    }
+  } catch (err) {
+    errorMessage = `Erreur lors de la récupération des devis : ${err}`;
+  }
+}
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Devis reçus | Admin SARL Ouerghi</title>
+  </head>
+  <body class="min-h-screen bg-surface text-slate">
+    <AdminNav current="devis" />
+    <main class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+      <h1 class="font-heading text-3xl font-semibold text-petrol">Devis reçus</h1>
+
+      {errorMessage && <p class="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{errorMessage}</p>}
+
+      <div class="mt-6 overflow-x-auto rounded-2xl border border-border bg-white">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-border text-left">
+              <th class="p-3 font-heading text-petrol">Date</th>
+              <th class="p-3 font-heading text-petrol">Nom</th>
+              <th class="p-3 font-heading text-petrol">Téléphone</th>
+              <th class="p-3 font-heading text-petrol">Type</th>
+              <th class="p-3 font-heading text-petrol">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              submissions.map((s) => (
+                <tr class="border-b border-border last:border-0">
+                  <td class="whitespace-nowrap p-3">{new Date(s.created_at).toLocaleString("fr-FR")}</td>
+                  <td class="p-3">{s.data?.nom}</td>
+                  <td class="p-3">
+                    <a href={`tel:${s.data?.telephone}`} class="text-work hover:text-copper">
+                      {s.data?.telephone}
+                    </a>
+                  </td>
+                  <td class="p-3">{s.data?.type_intervention}</td>
+                  <td class="p-3 text-slate-soft">{s.data?.description}</td>
+                </tr>
+              ))
+            }
+            {
+              submissions.length === 0 && !errorMessage && (
+                <tr>
+                  <td colspan="5" class="p-3 text-slate-soft">
+                    Aucun devis reçu pour l'instant.
+                  </td>
+                </tr>
+              )
+            }
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>

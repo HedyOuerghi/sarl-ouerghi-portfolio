@@ -1,0 +1,90 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+
+const typesIntervention = ["Plomberie", "Chauffage", "Climatisation", "Dépannage urgence", "Autre"];
+---
+
+<form
+  name="devis"
+  method="POST"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  action="/merci/"
+  class:list={["space-y-5", className]}
+>
+  <input type="hidden" name="form-name" value="devis" />
+
+  <p class="absolute left-[-9999px]" aria-hidden="true">
+    <label>
+      Ne pas remplir si vous êtes humain
+      <input name="bot-field" tabindex="-1" autocomplete="off" />
+    </label>
+  </p>
+
+  <div>
+    <label for="nom" class="block font-heading text-sm font-semibold text-petrol">
+      Nom et prénom <span aria-hidden="true">*</span>
+    </label>
+    <input
+      type="text"
+      id="nom"
+      name="nom"
+      required
+      autocomplete="name"
+      class="mt-1 w-full rounded-xl border border-border bg-white px-3.5 py-2.5 text-slate transition-colors focus-visible:border-copper"
+    />
+  </div>
+
+  <div>
+    <label for="telephone" class="block font-heading text-sm font-semibold text-petrol">
+      Téléphone <span aria-hidden="true">*</span>
+    </label>
+    <input
+      type="tel"
+      id="telephone"
+      name="telephone"
+      required
+      autocomplete="tel"
+      class="mt-1 w-full rounded-xl border border-border bg-white px-3.5 py-2.5 text-slate transition-colors focus-visible:border-copper"
+    />
+  </div>
+
+  <div>
+    <label for="type-intervention" class="block font-heading text-sm font-semibold text-petrol">
+      Type d'intervention <span aria-hidden="true">*</span>
+    </label>
+    <select
+      id="type-intervention"
+      name="type_intervention"
+      required
+      class="mt-1 w-full rounded-xl border border-border bg-white px-3.5 py-2.5 text-slate transition-colors focus-visible:border-copper"
+    >
+      <option value="" selected disabled>Sélectionnez une option</option>
+      {typesIntervention.map((type) => <option value={type}>{type}</option>)}
+    </select>
+  </div>
+
+  <div>
+    <label for="description" class="block font-heading text-sm font-semibold text-petrol">
+      Description de votre besoin <span aria-hidden="true">*</span>
+    </label>
+    <textarea
+      id="description"
+      name="description"
+      rows="4"
+      required
+      class="mt-1 w-full rounded-xl border border-border bg-white px-3.5 py-2.5 text-slate transition-colors focus-visible:border-copper"
+    ></textarea>
+  </div>
+
+  <button
+    type="submit"
+    class="shadow-soft-hover w-full rounded-full bg-copper px-7 py-3 font-heading text-base font-semibold text-white transition-colors hover:bg-copper-hover sm:w-auto"
+  >
+    Demander un devis
+  </button>
+</form>

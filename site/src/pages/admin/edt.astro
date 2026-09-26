@@ -1,0 +1,128 @@
+---
+import { getStore } from "@netlify/blobs";
+import AdminNav from "../../components/AdminNav.astro";
+import { isAdminAuthenticated } from "../../lib/adminAuth";
+import { getIcsToken } from "../../lib/icsToken";
+import { OAUTH_GITHUB_CLIENT_SECRET } from "astro:env/server";
+import "../../styles/global.css";
+
+export const prerender = false;
+
+if (!(await isAdminAuthenticated(Astro.session))) {
+  return Astro.redirect(`/oauth?next=${encodeURIComponent(Astro.url.pathname)}`);
+}
+
+const store = getStore({ name: "edt", consistency: "strong" });
+const entries: any[] = (await store.get("entries", { type: "json" })) ?? [];
+entries.sort((a, b) => (a.date < b.date ? -1 : 1));
+
+const icsToken = await getIcsToken(OAUTH_GITHUB_CLIENT_SECRET);
+const icsUrl = new URL(`/admin/edt.ics?token=${icsToken}`, Astro.url.origin).toString();
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Emploi du temps | Admin SARL Ouerghi</title>
+  </head>
+  <body class="min-h-screen bg-surface text-slate">
+    <AdminNav current="edt" />
+    <main class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <h1 class="font-heading text-3xl font-semibold text-petrol">Emploi du temps</h1>
+
+      <div class="shadow-soft mt-6 rounded-2xl border border-border bg-white p-4 text-sm">
+        <p class="font-heading font-semibold text-petrol">Voir dans Calendrier (iPhone / Mac)</p>
+        <p class="mt-1 text-slate-soft">
+          Réglages > Calendrier > Comptes > Ajouter un compte > Autre > Ajouter un abonnement, et colle
+          cette adresse :
+        </p>
+        <code class="mt-2 block overflow-x-auto rounded-lg bg-surface p-2 text-xs">{icsUrl}</code>
+        <p class="mt-1 text-xs text-slate-soft">
+          Mise à jour automatique toutes les heures environ (le calendrier ne se modifie que depuis
+          cette page, pas depuis l'app Calendrier).
+        </p>
+      </div>
+
+      <form
+        method="POST"
+        action="/admin/edt-add"
+        class="mt-8 flex flex-col gap-3 rounded-2xl border border-border bg-white p-5"
+      >
+        <p class="font-heading font-semibold text-petrol">Ajouter une entrée</p>
+        <label class="flex flex-col gap-1 text-sm">
+          Date
+          <input
+            type="date"
+            name="date"
+            required
+            class="rounded-lg border border-border px-3 py-2 focus-visible:border-copper"
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          Titre
+          <input
+            type="text"
+            name="titre"
+            required
+            class="rounded-lg border border-border px-3 py-2 focus-visible:border-copper"
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          Notes
+          <textarea name="notes" rows="3" class="rounded-lg border border-border px-3 py-2 focus-visible:border-copper"
+          ></textarea>
+        </label>
+        <button
+          type="submit"
+          class="shadow-soft-hover mt-1 self-start rounded-full bg-copper px-6 py-2 font-heading text-sm font-semibold text-white transition-colors hover:bg-copper-hover"
+        >
+          Ajouter
+        </button>
+      </form>
+
+      <div class="mt-8 overflow-x-auto rounded-2xl border border-border bg-white">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-border text-left">
+              <th class="p-3 font-heading text-petrol">Date</th>
+              <th class="p-3 font-heading text-petrol">Titre</th>
+              <th class="p-3 font-heading text-petrol">Notes</th>
+              <th class="p-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              entries.map((entry) => (
+                <tr class="border-b border-border last:border-0">
+                  <td class="whitespace-nowrap p-3">{entry.date}</td>
+                  <td class="p-3">{entry.titre}</td>
+                  <td class="p-3 text-slate-soft">{entry.notes}</td>
+                  <td class="p-3">
+                    <form method="POST" action="/admin/edt-delete">
+                      <input type="hidden" name="id" value={entry.id} />
+                      <button type="submit" class="text-xs text-slate-soft underline hover:text-copper">
+                        Supprimer
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              ))
+            }
+            {
+              entries.length === 0 && (
+                <tr>
+                  <td colspan="4" class="p-3 text-slate-soft">
+                    Aucune entrée pour l'instant.
+                  </td>
+                </tr>
+              )
+            }
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>

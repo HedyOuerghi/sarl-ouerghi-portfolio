@@ -1,0 +1,46 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import { services } from "../data/entreprise";
+---
+
+<Layout
+  title="Services de plomberie, chauffage, climatisation et dépannage | SARL Ouerghi"
+  description="Plomberie, chauffage, climatisation et dépannage urgence à Cannes : installation, entretien et réparation."
+>
+  <section class="hero-band text-white">
+    <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+      <h1 class="font-heading text-4xl font-semibold sm:text-5xl">Nos services</h1>
+      <p class="mt-4 max-w-2xl text-white/85">
+        Plomberie, chauffage, climatisation et dépannage urgence, à Cannes et dans les environs.
+      </p>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-6xl divide-y divide-border px-4 sm:px-6">
+    {
+      services.map((service) => (
+        <section id={service.slug} class="scroll-mt-24 py-14">
+          <SectionTitle as="h2">{service.titre}</SectionTitle>
+          <p class="mt-4 max-w-3xl text-slate-soft">{service.description}</p>
+
+          <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+            {service.prestations.map((prestation) => (
+              <li class="flex items-start gap-2 text-sm text-slate">
+                <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-copper" />
+                {prestation}
+              </li>
+            ))}
+          </ul>
+
+          <a
+            href="/contact/"
+            class="shadow-soft-hover mt-6 inline-block rounded-full bg-copper px-6 py-2.5 font-heading text-sm font-semibold text-white transition-colors hover:bg-copper-hover"
+          >
+            Demander un devis
+          </a>
+        </section>
+      ))
+    }
+  </div>
+</Layout>

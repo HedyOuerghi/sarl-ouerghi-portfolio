@@ -1,0 +1,104 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import FormulaireDevis from "../components/FormulaireDevis.astro";
+import { entreprise } from "../data/entreprise";
+---
+
+<Layout
+  title="Contact | SARL Ouerghi, plombier chauffagiste à Cannes"
+  description="Contactez SARL Ouerghi à Cannes pour un devis en plomberie ou chauffage : coordonnées, horaires, zone d'intervention et formulaire de contact."
+>
+  <section class="hero-band text-white">
+    <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+      <h1 class="font-heading text-4xl font-semibold sm:text-5xl">Contact</h1>
+      <p class="mt-4 max-w-2xl text-white/85">
+        Une question, un besoin d'intervention ? Contactez-nous par téléphone ou via le
+        formulaire ci-dessous.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <div class="grid gap-12 md:grid-cols-2">
+      <div>
+        <SectionTitle as="h2">Nos coordonnées</SectionTitle>
+
+        <dl class="mt-6 space-y-6">
+          <div>
+            <dt class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+              Adresse
+            </dt>
+            <dd class="mt-1 text-slate">
+              {entreprise.adresse.rue}<br />
+              {entreprise.adresse.codePostal} {entreprise.adresse.ville}
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+              Téléphone
+            </dt>
+            <dd class="mt-1">
+              <a href={entreprise.telephoneHref} class="text-work hover:text-copper">
+                {entreprise.telephone}
+              </a>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+              Email
+            </dt>
+            <dd class="mt-1">
+              <a href={`mailto:${entreprise.email}`} class="text-work hover:text-copper">
+                {entreprise.email}
+              </a>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+              Horaires
+            </dt>
+            <dd class="mt-1">
+              <ul class="space-y-1 text-slate">
+                {
+                  entreprise.horaires.map((h) => (
+                    <li class="flex justify-between gap-4 border-b border-border py-1 text-sm sm:w-80">
+                      <span>{h.jours}</span>
+                      <span class="text-slate-soft">{h.plage}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+              Zone d'intervention
+            </dt>
+            <dd class="mt-1 flex flex-wrap gap-2">
+              {
+                entreprise.zoneIntervention.map((ville) => (
+                  <span class="shadow-soft rounded-full border border-border bg-white px-3.5 py-1.5 text-sm text-slate">
+                    {ville}
+                  </span>
+                ))
+              }
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div>
+        <SectionTitle as="h2">Demander un devis</SectionTitle>
+        <p class="mt-4 text-slate-soft">
+          Décrivez-nous votre besoin, nous vous recontactons rapidement.
+        </p>
+        <FormulaireDevis class="mt-8" />
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,21 @@
+---
+interface Props {
+  titre: string;
+  resume: string;
+  href: string;
+}
+
+const { titre, resume, href } = Astro.props;
+---
+
+<a
+  href={href}
+  class="shadow-soft-hover group block rounded-2xl border border-border bg-white p-7 motion-reduce:hover:translate-y-0"
+>
+  <h3 class="font-heading text-xl font-semibold text-petrol">{titre}</h3>
+  <span class="mt-2 block h-1 w-10 rounded-full bg-copper transition-all group-hover:w-16"></span>
+  <p class="mt-3 text-sm text-slate-soft">{resume}</p>
+  <span class="mt-4 inline-block font-heading text-sm font-semibold text-work group-hover:text-copper">
+    En savoir plus
+  </span>
+</a>

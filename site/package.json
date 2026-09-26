@@ -1,0 +1,26 @@
+{
+  "name": "sarl-ouerghi-web",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^6.6.5",
+    "@astrojs/sitemap": "^3.7.3",
+    "@netlify/blobs": "^10.7.13",
+    "astro": "^5.18.2",
+    "astro-decap-cms-oauth": "^0.5.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
