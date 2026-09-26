@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="titre-avant">
+  <title id="titre-avant">Photo avant travaux à venir</title>
+  <rect width="400" height="300" fill="#e0e3e1"/>
+  <rect x="1" y="1" width="398" height="298" fill="none" stroke="#5b6b76" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="200" y="140" font-family="Arial, sans-serif" font-size="20" fill="#2a3540" text-anchor="middle">AVANT</text>
+  <text x="200" y="168" font-family="Arial, sans-serif" font-size="14" fill="#5b6b76" text-anchor="middle">Photo à venir</text>
+</svg>

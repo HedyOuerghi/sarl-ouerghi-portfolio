@@ -1,0 +1,34 @@
+---
+interface Props {
+  current?: "hub" | "cms" | "edt" | "devis" | "clients" | "factures";
+}
+const { current } = Astro.props;
+
+const liens = [
+  { key: "hub", href: "/admin/", label: "Accueil" },
+  { key: "cms", href: "/admin/cms/", label: "Contenu du site" },
+  { key: "edt", href: "/admin/edt", label: "Emploi du temps" },
+  { key: "devis", href: "/admin/devis", label: "Devis" },
+  { key: "clients", href: "/admin/clients", label: "Clients" },
+  { key: "factures", href: "/admin/factures", label: "Factures" },
+];
+---
+
+<nav class="header-band flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 text-sm text-white sm:px-6">
+  <span class="font-heading font-semibold tracking-wide">Admin SARL Ouerghi</span>
+  <div class="flex flex-wrap gap-x-4 gap-y-1">
+    {
+      liens.map((lien) => (
+        <a
+          href={lien.href}
+          class:list={[
+            "transition-colors hover:text-copper",
+            current === lien.key ? "font-semibold text-copper" : "text-white/85",
+          ]}
+        >
+          {lien.label}
+        </a>
+      ))
+    }
+  </div>
+</nav>

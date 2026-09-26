@@ -1,0 +1,52 @@
+---
+import AdminNav from "../../components/AdminNav.astro";
+import { isAdminAuthenticated } from "../../lib/adminAuth";
+import "../../styles/global.css";
+
+export const prerender = false;
+
+if (!(await isAdminAuthenticated(Astro.session))) {
+  return Astro.redirect(`/oauth?next=${encodeURIComponent(Astro.url.pathname)}`);
+}
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Admin | SARL Ouerghi</title>
+  </head>
+  <body class="min-h-screen bg-surface text-slate">
+    <AdminNav current="hub" />
+    <main class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <h1 class="font-heading text-3xl font-semibold text-petrol">Administration</h1>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        <a
+          href="/admin/cms/"
+          class="shadow-soft-hover rounded-2xl border border-border bg-white p-6"
+        >
+          <p class="font-heading text-lg font-semibold text-petrol">Contenu du site</p>
+          <p class="mt-1 text-sm text-slate-soft">Réalisations, photos avant/après</p>
+        </a>
+        <a href="/admin/edt" class="shadow-soft-hover rounded-2xl border border-border bg-white p-6">
+          <p class="font-heading text-lg font-semibold text-petrol">Emploi du temps</p>
+          <p class="mt-1 text-sm text-slate-soft">Planning, synchronisable avec Calendrier (Apple)</p>
+        </a>
+        <a href="/admin/devis" class="shadow-soft-hover rounded-2xl border border-border bg-white p-6">
+          <p class="font-heading text-lg font-semibold text-petrol">Devis reçus</p>
+          <p class="mt-1 text-sm text-slate-soft">Demandes envoyées depuis le site</p>
+        </a>
+        <a href="/admin/clients" class="shadow-soft-hover rounded-2xl border border-border bg-white p-6">
+          <p class="font-heading text-lg font-semibold text-petrol">Clients</p>
+          <p class="mt-1 text-sm text-slate-soft">Coordonnées et notes par client</p>
+        </a>
+        <a href="/admin/factures" class="shadow-soft-hover rounded-2xl border border-border bg-white p-6">
+          <p class="font-heading text-lg font-semibold text-petrol">Factures</p>
+          <p class="mt-1 text-sm text-slate-soft">Suivi payé / impayé</p>
+        </a>
+      </div>
+    </main>
+  </body>
+</html>

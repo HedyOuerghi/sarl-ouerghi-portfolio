@@ -1,0 +1,26 @@
+backend:
+  name: github
+  repo: HedyOuerghi/sarl-ouerghi
+  branch: main
+  base_url: https://example.com
+  auth_endpoint: oauth
+
+media_folder: "site/public/images/realisations"
+public_folder: "/images/realisations"
+
+collections:
+  - name: "realisations"
+    label: "Réalisations (chantiers)"
+    folder: "site/src/content/realisations"
+    create: true
+    slug: "{{slug}}"
+    format: "json"
+    fields:
+      - { label: "Titre du chantier", name: "titre", widget: "string" }
+      - { label: "Ville", name: "lieu", widget: "string" }
+      - label: "Catégorie"
+        name: "categorie"
+        widget: "select"
+        options: ["Plomberie", "Chauffage", "Climatisation", "Dépannage urgence"]
+      - { label: "Photo avant travaux", name: "imageAvant", widget: "image" }
+      - { label: "Photo après travaux", name: "imageApres", widget: "image" }

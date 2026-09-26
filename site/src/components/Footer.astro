@@ -1,0 +1,55 @@
+---
+import { entreprise } from "../data/entreprise";
+
+const annee = new Date().getFullYear();
+---
+
+<footer class="bg-petrol text-white/90">
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-3">
+    <div>
+      <p class="font-heading text-lg font-semibold text-white">{entreprise.nom}</p>
+      <p class="mt-2 text-sm text-white/70">{entreprise.slogan}</p>
+    </div>
+
+    <div>
+      <p class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+        Coordonnées
+      </p>
+      <address class="mt-2 space-y-1 text-sm not-italic text-white/80">
+        <p>{entreprise.adresse.rue}</p>
+        <p>{entreprise.adresse.codePostal} {entreprise.adresse.ville}</p>
+        <p>
+          <a href={entreprise.telephoneHref} class="hover:text-copper">{entreprise.telephone}</a>
+        </p>
+        <p>
+          <a href={`mailto:${entreprise.email}`} class="hover:text-copper">{entreprise.email}</a>
+        </p>
+      </address>
+    </div>
+
+    <div>
+      <p class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+        Navigation
+      </p>
+      <ul class="mt-2 space-y-1 text-sm text-white/80">
+        <li><a href="/" class="hover:text-copper">Accueil</a></li>
+        <li><a href="/services/" class="hover:text-copper">Services</a></li>
+        <li><a href="/realisations/" class="hover:text-copper">Réalisations</a></li>
+        <li><a href="/contact/" class="hover:text-copper">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div
+    class="border-t border-white/10 px-4 py-4 text-center text-xs text-white/60 sm:px-6"
+  >
+    <p>© {annee} {entreprise.nom}. Tous droits réservés.</p>
+    <p class="mt-1">
+      <a href="/mentions-legales/" class="hover:text-copper">Mentions légales</a>
+      <span aria-hidden="true"> · </span>
+      <a href="/politique-de-confidentialite/" class="hover:text-copper">
+        Politique de confidentialité
+      </a>
+    </p>
+  </div>
+</footer>

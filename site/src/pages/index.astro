@@ -1,0 +1,134 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import FormulaireDevis from "../components/FormulaireDevis.astro";
+import { entreprise, services } from "../data/entreprise";
+
+const apercuRealisations = (await getCollection("realisations"))
+  .sort((a, b) => a.id.localeCompare(b.id))
+  .slice(0, 3);
+---
+
+<Layout
+  title="SARL Ouerghi | Plombier chauffagiste et climatisation à Cannes"
+  description="Artisan plombier chauffagiste à Cannes : installation, entretien et dépannage urgence en plomberie, chauffage et climatisation. Devis gratuit."
+>
+  <section class="hero-band text-white">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <h1 class="max-w-2xl font-heading text-4xl font-semibold leading-tight sm:text-5xl">
+        Plombier chauffagiste à Cannes
+      </h1>
+      <p class="mt-4 max-w-xl text-lg text-white/85">
+        Installation, entretien et dépannage en plomberie, chauffage et climatisation.
+        Intervention rapide sur Cannes et ses environs.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="#devis"
+          class="shadow-soft-hover rounded-full bg-copper px-7 py-3 font-heading text-base font-semibold transition-colors hover:bg-copper-hover"
+        >
+          Demander un devis
+        </a>
+        <a
+          href={entreprise.telephoneHref}
+          class="rounded-full border border-white/40 px-7 py-3 font-heading text-base font-semibold transition-colors hover:border-copper hover:text-copper"
+        >
+          {entreprise.telephone}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    <SectionTitle>Nos services</SectionTitle>
+    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        services.map((service) => (
+          <ServiceCard
+            titre={service.titre}
+            resume={service.resume}
+            href={`/services/#${service.slug}`}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="bg-surface py-16">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <SectionTitle>Nos dernières réalisations</SectionTitle>
+      <div class="mt-8 grid gap-6 sm:grid-cols-3">
+        {
+          apercuRealisations.map(({ data: chantier }) => (
+            <div class="shadow-soft-hover overflow-hidden rounded-2xl border border-border bg-white">
+              <img
+                src={chantier.imageApres}
+                alt={`Chantier ${chantier.titre} à ${chantier.lieu}, après travaux (photo provisoire)`}
+                width="400"
+                height="300"
+                loading="lazy"
+                class="h-40 w-full object-cover"
+              />
+              <div class="p-4">
+                <p class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+                  {chantier.categorie}
+                </p>
+                <p class="mt-1 font-heading text-lg font-semibold text-petrol">{chantier.titre}</p>
+                <p class="text-sm text-slate-soft">{chantier.lieu}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <a
+        href="/realisations/"
+        class="mt-8 inline-block font-heading text-base font-semibold text-work hover:text-copper"
+      >
+        Voir toutes nos réalisations
+      </a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    <SectionTitle>Pourquoi nous choisir</SectionTitle>
+    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="shadow-soft rounded-2xl bg-white p-6">
+        <p class="font-heading text-xl font-semibold text-petrol">Artisan local</p>
+        <p class="mt-2 text-sm text-slate-soft">
+          Basés à Cannes, nous connaissons le terrain et intervenons rapidement chez vous.
+        </p>
+      </div>
+      <div class="shadow-soft rounded-2xl bg-white p-6">
+        <p class="font-heading text-xl font-semibold text-petrol">Devis gratuit</p>
+        <p class="mt-2 text-sm text-slate-soft">
+          Un diagnostic clair et un devis détaillé avant toute intervention.
+        </p>
+      </div>
+      <div class="shadow-soft rounded-2xl bg-white p-6">
+        <p class="font-heading text-xl font-semibold text-petrol">Travail soigné</p>
+        <p class="mt-2 text-sm text-slate-soft">
+          Chantier laissé propre et finitions soignées, petit dépannage ou gros travaux.
+        </p>
+      </div>
+      <div class="shadow-soft rounded-2xl bg-white p-6">
+        <p class="font-heading text-xl font-semibold text-petrol">Certifié RGE</p>
+        <p class="mt-2 text-sm text-slate-soft">
+          Qualification Qualibat RGE : vos travaux de chauffage et climatisation peuvent être
+          éligibles aux aides de l'État.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="devis" class="bg-surface py-16">
+    <div class="mx-auto max-w-2xl px-4 sm:px-6">
+      <SectionTitle>Demander un devis</SectionTitle>
+      <p class="mt-4 text-slate-soft">
+        Décrivez-nous votre besoin, nous vous recontactons rapidement.
+      </p>
+      <FormulaireDevis class="mt-8" />
+    </div>
+  </section>
+</Layout>

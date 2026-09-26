@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="titre-apres">
+  <title id="titre-apres">Photo après travaux à venir</title>
+  <rect width="400" height="300" fill="#16506e"/>
+  <rect x="1" y="1" width="398" height="298" fill="none" stroke="#c0703a" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="200" y="140" font-family="Arial, sans-serif" font-size="20" fill="#ffffff" text-anchor="middle">APRÈS</text>
+  <text x="200" y="168" font-family="Arial, sans-serif" font-size="14" fill="#d98a56" text-anchor="middle">Photo à venir</text>
+</svg>

@@ -1,0 +1,143 @@
+---
+import { getStore } from "@netlify/blobs";
+import AdminNav from "../../components/AdminNav.astro";
+import { isAdminAuthenticated } from "../../lib/adminAuth";
+import "../../styles/global.css";
+
+export const prerender = false;
+
+if (!(await isAdminAuthenticated(Astro.session))) {
+  return Astro.redirect(`/oauth?next=${encodeURIComponent(Astro.url.pathname)}`);
+}
+
+const store = getStore({ name: "clients", consistency: "strong" });
+const entries: any[] = (await store.get("entries", { type: "json" })) ?? [];
+entries.sort((a, b) => (a.nom ?? "").localeCompare(b.nom ?? ""));
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Clients | Admin SARL Ouerghi</title>
+  </head>
+  <body class="min-h-screen bg-surface text-slate">
+    <AdminNav current="clients" />
+    <main class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <h1 class="font-heading text-3xl font-semibold text-petrol">Clients</h1>
+
+      <form
+        method="POST"
+        action="/admin/clients-add"
+        class="mt-6 flex flex-col gap-3 rounded-2xl border border-border bg-white p-5"
+      >
+        <p class="font-heading font-semibold text-petrol">Ajouter un client</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="flex flex-col gap-1 text-sm">
+            Nom
+            <input
+              type="text"
+              name="nom"
+              required
+              class="rounded-lg border border-border px-3 py-2 focus-visible:border-copper"
+            />
+          </label>
+          <label class="flex flex-col gap-1 text-sm">
+            Téléphone
+            <input
+              type="tel"
+              name="telephone"
+              class="rounded-lg border border-border px-3 py-2 focus-visible:border-copper"
+            />
+          </label>
+          <label class="flex flex-col gap-1 text-sm">
+            Email
+            <input
+              type="email"
+              name="email"
+              class="rounded-lg border border-border px-3 py-2 focus-visible:border-copper"
+            />
+          </label>
+          <label class="flex flex-col gap-1 text-sm">
+            Adresse
+            <input
+              type="text"
+              name="adresse"
+              class="rounded-lg border border-border px-3 py-2 focus-visible:border-copper"
+            />
+          </label>
+        </div>
+        <label class="flex flex-col gap-1 text-sm">
+          Notes
+          <textarea name="notes" rows="2" class="rounded-lg border border-border px-3 py-2 focus-visible:border-copper"
+          ></textarea>
+        </label>
+        <button
+          type="submit"
+          class="shadow-soft-hover mt-1 self-start rounded-full bg-copper px-6 py-2 font-heading text-sm font-semibold text-white transition-colors hover:bg-copper-hover"
+        >
+          Ajouter
+        </button>
+      </form>
+
+      <div class="mt-8 overflow-x-auto rounded-2xl border border-border bg-white">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-border text-left">
+              <th class="p-3 font-heading text-petrol">Nom</th>
+              <th class="p-3 font-heading text-petrol">Téléphone</th>
+              <th class="p-3 font-heading text-petrol">Email</th>
+              <th class="p-3 font-heading text-petrol">Adresse</th>
+              <th class="p-3 font-heading text-petrol">Notes</th>
+              <th class="p-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              entries.map((c) => (
+                <tr class="border-b border-border last:border-0">
+                  <td class="p-3 font-semibold text-petrol">{c.nom}</td>
+                  <td class="whitespace-nowrap p-3">
+                    {c.telephone && (
+                      <a href={`tel:${c.telephone}`} class="text-work hover:text-copper">
+                        {c.telephone}
+                      </a>
+                    )}
+                  </td>
+                  <td class="p-3">
+                    {c.email && (
+                      <a href={`mailto:${c.email}`} class="text-work hover:text-copper">
+                        {c.email}
+                      </a>
+                    )}
+                  </td>
+                  <td class="p-3 text-slate-soft">{c.adresse}</td>
+                  <td class="p-3 text-slate-soft">{c.notes}</td>
+                  <td class="p-3">
+                    <form method="POST" action="/admin/clients-delete">
+                      <input type="hidden" name="id" value={c.id} />
+                      <button type="submit" class="text-xs text-slate-soft underline hover:text-copper">
+                        Supprimer
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              ))
+            }
+            {
+              entries.length === 0 && (
+                <tr>
+                  <td colspan="6" class="p-3 text-slate-soft">
+                    Aucun client pour l'instant.
+                  </td>
+                </tr>
+              )
+            }
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>

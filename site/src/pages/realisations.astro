@@ -1,0 +1,71 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+
+const realisations = (await getCollection("realisations")).sort((a, b) =>
+  a.id.localeCompare(b.id)
+);
+---
+
+<Layout
+  title="Réalisations en plomberie, chauffage et climatisation | SARL Ouerghi"
+  description="Chantiers de plomberie, chauffage et climatisation à Cannes et dans les environs, en photos avant / après."
+>
+  <section class="hero-band text-white">
+    <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+      <h1 class="font-heading text-4xl font-semibold sm:text-5xl">Nos réalisations</h1>
+      <p class="mt-4 max-w-2xl text-white/85">
+        Quelques chantiers récents en plomberie, chauffage et climatisation. Les images ci-dessous
+        sont provisoires, en attendant les vraies photos.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <SectionTitle>Chantiers avant / après</SectionTitle>
+    <div class="mt-8 grid gap-8 sm:grid-cols-2">
+      {
+        realisations.map(({ data: chantier }) => (
+          <article class="shadow-soft-hover overflow-hidden rounded-2xl border border-border bg-white">
+            <div class="grid grid-cols-2">
+              <figure class="m-0">
+                <img
+                  src={chantier.imageAvant}
+                  alt={`Chantier ${chantier.titre} à ${chantier.lieu}, avant travaux (photo provisoire)`}
+                  width="400"
+                  height="300"
+                  loading="lazy"
+                  class="h-40 w-full object-cover sm:h-48"
+                />
+                <figcaption class="bg-slate/90 py-1 text-center text-xs font-heading font-semibold uppercase tracking-wide text-white">
+                  Avant
+                </figcaption>
+              </figure>
+              <figure class="m-0">
+                <img
+                  src={chantier.imageApres}
+                  alt={`Chantier ${chantier.titre} à ${chantier.lieu}, après travaux (photo provisoire)`}
+                  width="400"
+                  height="300"
+                  loading="lazy"
+                  class="h-40 w-full object-cover sm:h-48"
+                />
+                <figcaption class="bg-petrol py-1 text-center text-xs font-heading font-semibold uppercase tracking-wide text-white">
+                  Après
+                </figcaption>
+              </figure>
+            </div>
+            <div class="p-4">
+              <p class="font-heading text-sm font-semibold uppercase tracking-wide text-copper">
+                {chantier.categorie}
+              </p>
+              <p class="mt-1 font-heading text-lg font-semibold text-petrol">{chantier.titre}</p>
+              <p class="text-sm text-slate-soft">{chantier.lieu}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
